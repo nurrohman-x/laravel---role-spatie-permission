@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -26,4 +27,8 @@ Route::middleware('role:user')->group(function () {
 
 Route::middleware('role:admin')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+    Route::resource('user', UserController::class);
+    Route::get('user-data', [UserController::class, 'data'])->name('user.data');
+    Route::post('user-status/{id}', [UserController::class, 'status'])->name('user.status');
 });
